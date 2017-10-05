@@ -4,7 +4,7 @@ class World:
         self.height = height
         self.swimmers = []
         for i in range(swimmers_amount):
-            self.swimmers.append(Swimmer(300,300))
+            self.swimmers.append(Swimmer(50+(width-150)/4*i, 300))
     def update(self, delta):
         self.ship.update(delta)
 
