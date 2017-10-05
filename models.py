@@ -17,13 +17,17 @@ class World:
         self.swimmers[1].command = arcade.key.S
         self.swimmers[2].command = arcade.key.D
         self.swimmers[3].command = arcade.key.F
+        self.swimmers[0].text = "A"
+        self.swimmers[1].text = "S"
+        self.swimmers[2].text = "D"
+        self.swimmers[3].text = "F"
     def update(self, delta):
         self.time += delta
-        self.randomized = random.uniform(0,1)*2
+        self.randomized = random.uniform(0,1)*60
         if Swimmer.alive_swimmers > 0:
             if self.randomized < self.time:
                 self.fallen_position = random.randint(0,3)
-                while(not self.swimmers[self.fallen_position].alive):
+                while not self.swimmers[self.fallen_position].alive:
                     self.fallen_position = random.randint(0,3)
                 self.swimmers[self.fallen_position].fallen()
                 self.time = 0
@@ -42,19 +46,22 @@ class Swimmer:
         self.alive = True
         self.sinking = False
         self.unsinking = False
-        self.text = ''
+        self.text = 'GG'
         self.command = ''
         self.sprite = arcade.Sprite()
         self.sprite.texture = SpriteTextures.swimmer_normal
         self.sprite.center_x = self.x
         self.sprite.center_y = self.y
+        self.text_obj = arcade.create_text(self.text,
+            arcade.color.BLACK, 14,
+            anchor_x="center", anchor_y="bottom")
         Swimmer.alive_swimmers += 1
     def fallen(self):
         self.sprite.texture = SpriteTextures.swimmer_fallen
         self.sinking = True
     def sink(self):
         if self.sinking:
-            self.y -= 2
+            self.y -= 4
         if self.sprite.top < -20:
             self.alive = False
             self.sinking = False
@@ -62,9 +69,10 @@ class Swimmer:
             Swimmer.alive_swimmers -= 1
     def unsink(self):
         if self.unsinking:
-            self.y += 3
+            self.y += 5
         if self.y>300:
             print("Unsinking")
+            self.sinking = False
             self.unsinking = False
             self.y = 300
             self.sprite.texture = SpriteTextures.swimmer_normal
@@ -77,6 +85,7 @@ class Swimmer:
             self.sprite.update()
     def draw(self):
         self.sprite.draw()
+        arcade.render_text(self.text_obj, self.x, self.y)
     def on_key_press(self, key, key_modifiers):
         print("on_key_press; key = {} command = {}".format(key, self.command))
         if key == self.command:
