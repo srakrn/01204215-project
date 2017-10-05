@@ -29,6 +29,8 @@ class GameWindow(arcade.Window):
         arcade.start_render()
         for swimmer_sprite in self.swimmers_sprite:
             swimmer_sprite.draw()
+    def update(self, delta):
+        self.world.update(delta)
 
 if __name__ == '__main__':
     window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
