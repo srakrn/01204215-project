@@ -19,6 +19,9 @@ class GameWindow(arcade.Window):
             SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         for swimmer in self.world.swimmers:
             swimmer.draw()
+        arcade.draw_text(str(Swimmer.score),
+            self.width - 30, self.height - 30,
+            arcade.color.BLACK, 20)
     def update(self, delta):
         self.world.update(delta)
     def on_key_press(self, key, key_modifiers):

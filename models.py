@@ -41,13 +41,14 @@ class World:
 
 class Swimmer:
     alive_swimmers = 0
+    score = 0
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.alive = True
         self.sinking = False
         self.unsinking = False
-        self.text = 'GG'
+        self.text = ''
         self.command = ''
         self.sprite = arcade.Sprite()
         self.sprite.texture = SpriteTextures.swimmer_normal
@@ -78,6 +79,7 @@ class Swimmer:
             self.unsinking = False
             self.y = 275
             self.sprite.texture = SpriteTextures.swimmer_normal
+            Swimmer.score += 1
     def update(self, delta):
         if self.alive:
             self.sink()
