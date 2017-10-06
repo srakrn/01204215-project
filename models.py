@@ -4,6 +4,7 @@ import random
 class SpriteTextures:
     swimmer_normal = arcade.load_texture("imgs/swimmer-1.png", scale=1)
     swimmer_fallen = arcade.load_texture("imgs/swimmer-1-fallen.png", scale=1)
+    swimmer_up = arcade.load_texture("imgs/swimmer-1-up.png", scale=1)
 
 class World:
     def __init__(self, width, height, swimmers_amount):
@@ -12,7 +13,7 @@ class World:
         self.swimmers = []
         self.time = 0
         for i in range(swimmers_amount):
-            self.swimmers.append(Swimmer(50+(width-150)/4*i, 300))
+            self.swimmers.append(Swimmer(50+(width-150)/4*i, 275))
         self.swimmers[0].command = arcade.key.A
         self.swimmers[1].command = arcade.key.S
         self.swimmers[2].command = arcade.key.D
@@ -69,12 +70,13 @@ class Swimmer:
             Swimmer.alive_swimmers -= 1
     def unsink(self):
         if self.unsinking:
+            self.sprite.texture = SpriteTextures.swimmer_up
             self.y += 5
-        if self.y>300:
+        if self.y>275:
             print("Unsinking")
             self.sinking = False
             self.unsinking = False
-            self.y = 300
+            self.y = 275
             self.sprite.texture = SpriteTextures.swimmer_normal
     def update(self, delta):
         if self.alive:

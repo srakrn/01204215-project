@@ -12,8 +12,11 @@ class GameWindow(arcade.Window):
         super().__init__(width, height)
         arcade.set_background_color(arcade.color.WHITE)
         self.world = World(SCREEN_WIDTH, SCREEN_HEIGHT, SWIMMERS_AMOUNT)
+        self.background = arcade.load_texture("imgs/background.png")
     def on_draw(self):
         arcade.start_render()
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
+            SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         for swimmer in self.world.swimmers:
             swimmer.draw()
     def update(self, delta):
