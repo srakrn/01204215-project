@@ -2,77 +2,73 @@ import arcade, arcade.key
 import random
 
 class Commands:
-    command = [
+    commands = [
         {
-            "description": "Exiting vim without saving"
-            "command": ":q!"
-        },
-        {
-            "description": "Find"
+            "description": "Find",
             "command": "/"
         },
         {
-            "description": "To the next find result"
+            "description": "To the next find result",
             "command": "n"
         },
         {
-            "description": "Insert mode to append"
+            "description": "Insert mode to append",
             "command": "a"
         },
         {
-            "description": "Jump to the beginning of the next word"
+            "description": "Jump to the beginning of the next word",
             "command": "w"
         },
         {
-            "description": "Jump to the beginning of the previous word"
+            "description": "Jump to the beginning of the previous word",
             "command": "b"
         },
         {
-            "description": "Jump to the end of the next word"
+            "description": "Jump to the end of the next word",
             "command": "e"
         },
         {
-            "description": "Jump to the first non-blank character of the line"
+            "description": "Jump to the first non-blank character of the line",
             "command": "^"
         },
         {
-            "description": "Jump to the end of the line"
+            "description": "Jump to the end of the line",
             "command": "$"
         },
         {
-            "description": "Jump to the start of the line"
+            "description": "Jump to the start of the line",
             "command": "0"
         },
         {
-            "description": "Enter visual mode"
+            "description": "Enter visual mode",
             "command": "v"
         },
         {
-            "description": "Cursor left"
+            "description": "Cursor left",
             "command": "h"
         },
         {
-            "description": "Cursor down"
+            "description": "Cursor down",
             "command": "j"
         },
         {
-            "description": "Cursor up"
+            "description": "Cursor up",
             "command": "k"
         },
         {
-            "description": "Cursor right"
+            "description": "Cursor right",
             "command": "l"
         },
         {
-            "description": "Insert mode to the new lower line"
+            "description": "Insert mode to the new lower line",
             "command": "o"
         },
         {
-            "description": "Replace a single character"
+            "description": "Replace a single character",
             "command": "r"
         },
         {
-            "description": "Delete character and substitute text"
+            "description": "Delete character and substitute text",
             "command": "s"
         }
     ]
@@ -116,6 +112,7 @@ class Swimmer:
         self.alive = True
         self.sinking = False
         self.unsinking = False
+        self.rand = -1
         self.text = ''
         self.command = ''
         self.sprite = arcade.Sprite()
@@ -129,6 +126,8 @@ class Swimmer:
     def fallen(self):
         self.sprite.texture = SpriteTextures.swimmer_fallen
         self.sinking = True
+        self.set_key()
+        print(self.text)
     def sink(self):
         if self.sinking:
             self.y -= 4
@@ -148,6 +147,10 @@ class Swimmer:
             self.y = 275
             self.sprite.texture = SpriteTextures.swimmer_normal
             Swimmer.score += 1
+    def set_key(self):
+        self.rand = random.randint(0, len(Commands.commands))
+        self.text = Commands.commands[self.rand]["description"]
+        self.command = ord(Commands.commands[self.rand]["command"])
     def update(self, delta):
         if self.alive:
             self.sink()
