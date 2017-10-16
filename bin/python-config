@@ -1,4 +1,4 @@
-#!/home/srakrn/Works/VimGuard/bin/python
+#!/home/srakrn/Works/sophomore/oop/VimGuard/bin/python
 
 import sys
 import getopt
