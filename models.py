@@ -28,14 +28,6 @@ class Commands:
             "command": "e"
         },
         {
-            "description": "Jump to the first non-blank character of the line",
-            "command": "^"
-        },
-        {
-            "description": "Jump to the end of the line",
-            "command": "$"
-        },
-        {
             "description": "Jump to the start of the line",
             "command": "0"
         },
@@ -92,7 +84,7 @@ class World:
         if Swimmer.alive_swimmers > 0:
             if self.randomized < self.time:
                 self.fallen_position = random.randint(0,3)
-                while not self.swimmers[self.fallen_position].alive:
+                while not self.swimmers[self.fallen_position].alive and not self.swimmers[self.fallen_position].sinking:
                     self.fallen_position = random.randint(0,3)
                 self.swimmers[self.fallen_position].fallen()
                 self.time = 0
@@ -133,26 +125,24 @@ class Swimmer:
             self.alive = False
             self.sinking = False
             self.unsinking = False
+            self.text = ''
             Swimmer.alive_swimmers -= 1
     def unsink(self):
         if self.unsinking:
             self.sprite.texture = SpriteTextures.swimmer_up
             self.y += 5
+            self.text = ''
+            self.command = ''
         if self.y>275:
             self.sinking = False
             self.unsinking = False
             self.y = 275
             self.sprite.texture = SpriteTextures.swimmer_normal
-            self.text = ''
-            self.text_obj = arcade.create_text(self.text,
-                arcade.color.BLACK, 14, width=50, align="center", anchor_x="center", anchor_y="bottom")
             Swimmer.score += 1
     def set_key(self):
         self.rand = random.randint(0, len(Commands.commands)-1)
         self.text = Commands.commands[self.rand]["description"]
         self.command = ord(Commands.commands[self.rand]["command"])
-        self.text_obj = arcade.create_text(self.text,
-            arcade.color.BLACK, 14, width=50, align="center", anchor_x="center", anchor_y="bottom")
     def update(self, delta):
         if self.alive:
             self.sink()
@@ -160,6 +150,8 @@ class Swimmer:
             self.sprite.center_x = self.x
             self.sprite.center_y = self.y
             self.sprite.update()
+            self.text_obj = arcade.create_text(self.text,
+                arcade.color.BLACK, 14, width=50, align="center", anchor_x="center", anchor_y="bottom")
             arcade.render_text(self.text_obj, self.x, self.y)
     def draw(self):
         self.sprite.draw()
