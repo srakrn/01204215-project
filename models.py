@@ -88,7 +88,7 @@ class World:
             self.swimmers.append(Swimmer(50+(width-150)/4*i, 275))
     def update(self, delta):
         self.time += delta
-        self.randomized = random.uniform(0,1)*60
+        self.randomized = random.uniform(0,1)*200
         if Swimmer.alive_swimmers > 0:
             if self.randomized < self.time:
                 self.fallen_position = random.randint(0,3)
@@ -99,7 +99,6 @@ class World:
         for swimmer in self.swimmers:
             swimmer.update(delta)
     def on_key_press(self, key, key_modifiers):
-        print("Key pressed: {}".format(key))
         for swimmer in self.swimmers:
             swimmer.on_key_press(key, key_modifiers)
 
@@ -120,8 +119,7 @@ class Swimmer:
         self.sprite.center_x = self.x
         self.sprite.center_y = self.y
         self.text_obj = arcade.create_text(self.text,
-            arcade.color.BLACK, 14,
-            anchor_x="center", anchor_y="bottom")
+            arcade.color.BLACK, 14)
         Swimmer.alive_swimmers += 1
     def fallen(self):
         self.sprite.texture = SpriteTextures.swimmer_fallen
@@ -130,7 +128,7 @@ class Swimmer:
         print(self.text)
     def sink(self):
         if self.sinking:
-            self.y -= 4
+            self.y -= 2
         if self.sprite.top < -20:
             self.alive = False
             self.sinking = False
@@ -141,16 +139,20 @@ class Swimmer:
             self.sprite.texture = SpriteTextures.swimmer_up
             self.y += 5
         if self.y>275:
-            print("Unsinking")
             self.sinking = False
             self.unsinking = False
             self.y = 275
             self.sprite.texture = SpriteTextures.swimmer_normal
+            self.text = ''
+            self.text_obj = arcade.create_text(self.text,
+                arcade.color.BLACK, 14, width=50, align="center", anchor_x="center", anchor_y="bottom")
             Swimmer.score += 1
     def set_key(self):
-        self.rand = random.randint(0, len(Commands.commands))
+        self.rand = random.randint(0, len(Commands.commands)-1)
         self.text = Commands.commands[self.rand]["description"]
         self.command = ord(Commands.commands[self.rand]["command"])
+        self.text_obj = arcade.create_text(self.text,
+            arcade.color.BLACK, 14, width=50, align="center", anchor_x="center", anchor_y="bottom")
     def update(self, delta):
         if self.alive:
             self.sink()
@@ -158,10 +160,10 @@ class Swimmer:
             self.sprite.center_x = self.x
             self.sprite.center_y = self.y
             self.sprite.update()
+            arcade.render_text(self.text_obj, self.x, self.y)
     def draw(self):
         self.sprite.draw()
         arcade.render_text(self.text_obj, self.x, self.y)
     def on_key_press(self, key, key_modifiers):
-        print("on_key_press; key = {} command = {}".format(key, self.command))
         if key == self.command:
             self.unsinking = True
